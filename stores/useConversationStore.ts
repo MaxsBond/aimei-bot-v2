@@ -17,6 +17,9 @@ interface ConversationState {
   addConversationItem: (message: ChatCompletionMessageParam) => void;
   setDeveloperPrompt: (prompt: string) => void;
   rawSet: (state: any) => void;
+  // New state for loading indicator
+  isWaitingForReply: boolean;
+  setIsWaitingForReply: (isWaiting: boolean) => void;
 }
 
 const useConversationStore = create<ConversationState>((set) => ({
@@ -39,6 +42,9 @@ const useConversationStore = create<ConversationState>((set) => ({
     })),
   setDeveloperPrompt: (prompt) => set({ developerPrompt: prompt }),
   rawSet: set,
+  // Initialize new state and define setter
+  isWaitingForReply: false,
+  setIsWaitingForReply: (isWaiting) => set({ isWaitingForReply: isWaiting }),
 }));
 
 export default useConversationStore;

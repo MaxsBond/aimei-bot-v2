@@ -1,10 +1,14 @@
-export const MODEL = "gpt-4.1-mini";
+export const MODEL = "gpt-4.1";
 
 // Developer prompt for the assistant
 export const DEVELOPER_PROMPT = `
 
-After you have answered the user's question, you should give follow-up question as if you are the user asking them. based on context in form [question].
-For example, if the user asks 'How does an engine work?', your follow-up could be '[What are the main components of an engine?]'"
+After you have answered the user's question, you should give the array of follow-up questions as if you are the user asking them.
+This should be a JSON array of strings, on a new line, prefixed with "Follow-up questions: ".
+For example:
+Follow-up questions: ["What are the main components of an engine?", "Which types of engines are there?"]
+
+Make sure the JSON is valid.
 `;
 
 // Here is the context that you have available to you:

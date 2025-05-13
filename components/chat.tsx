@@ -5,6 +5,7 @@ import ToolCall from "./tool-call";
 import Message from "./message";
 import Annotations from "./annotations";
 import { Item } from "@/lib/assistant";
+import useConversationStore from "@/stores/useConversationStore";
 
 interface ChatProps {
   items: Item[];
@@ -16,6 +17,9 @@ const Chat: React.FC<ChatProps> = ({ items, onSendMessage }) => {
   const [inputMessageText, setinputMessageText] = useState<string>("");
   // This state is used to provide better user experience for non-English IMEs such as Japanese
   const [isComposing, setIsComposing] = useState(false);
+
+  // Get the waiting state from the store
+  const isWaitingForReply = useConversationStore((state) => state.isWaitingForReply);
 
   const scrollToBottom = () => {
     itemsEndRef.current?.scrollIntoView({ behavior: "instant" });
@@ -31,7 +35,7 @@ const Chat: React.FC<ChatProps> = ({ items, onSendMessage }) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [items]);
+  }, [items, isWaitingForReply]);
 
   return (
     <div className="flex justify-center items-center size-full">
@@ -59,6 +63,22 @@ const Chat: React.FC<ChatProps> = ({ items, onSendMessage }) => {
                 ) : null}
               </React.Fragment>
             ))}
+            {/* Display loading animation if waiting for reply */}
+            {isWaitingForReply && (
+              <div className="flex flex-col gap-1 py-2"> {/* py-2 for spacing like other messages */}
+                <div className="flex justify-start"> {/* Assistant messages are left-aligned */}
+                  {/* Avatar placeholder - can be styled like assistant's avatar if one exists */}
+                  {/* <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 mr-3 flex-shrink-0"></div> */}
+                  <div className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 p-3 rounded-lg shadow-sm max-w-[70%]">
+                    <div className="flex items-center space-x-1.5"> {/* Increased space slightly for aesthetics */}
+                      <div className="h-2 w-2 bg-current rounded-full animate-pulse" style={{ animationDelay: "0.0s" }}></div>
+                      <div className="h-2 w-2 bg-current rounded-full animate-pulse" style={{ animationDelay: "0.2s" }}></div>
+                      <div className="h-2 w-2 bg-current rounded-full animate-pulse" style={{ animationDelay: "0.4s" }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={itemsEndRef} />
           </div>
         </div>
