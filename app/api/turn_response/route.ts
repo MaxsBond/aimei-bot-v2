@@ -30,6 +30,7 @@ export async function POST(request: Request) {
             controller.enqueue(`data: ${data}\n\n`);
           }
           // End of stream
+          console.log("Stream closing, performing final actions.");
           controller.close();
         } catch (error) {
           console.error("Error in streaming loop:", error);

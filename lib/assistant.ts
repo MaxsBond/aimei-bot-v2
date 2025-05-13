@@ -1,4 +1,3 @@
-import { DEVELOPER_PROMPT } from "@/config/constants";
 import { parse } from "partial-json";
 import { handleTool } from "@/lib/tools/tools-handling";
 import useConversationStore from "@/stores/useConversationStore";
@@ -103,6 +102,7 @@ export const processMessages = async () => {
     conversationItems,
     setChatMessages,
     setConversationItems,
+    developerPrompt,
   } = useConversationStore.getState();
 
   const tools = getTools();
@@ -110,7 +110,7 @@ export const processMessages = async () => {
     // Adding developer prompt as first item in the conversation
     {
       role: "developer",
-      content: DEVELOPER_PROMPT,
+      content: developerPrompt,
     },
     ...conversationItems,
   ];
@@ -270,7 +270,8 @@ export const processMessages = async () => {
           });
           setConversationItems([...conversationItems]);
 
-          // Create another turn after tool output has been added
+          // Create another turn after tool output has been added,
+          // unless it's a get_suggestions call, as its output is handled by the UI.
           await processMessages();
         }
       }

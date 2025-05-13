@@ -44,7 +44,10 @@ const Chat: React.FC<ChatProps> = ({ items, onSendMessage }) => {
                   <ToolCall toolCall={item} />
                 ) : item.type === "message" ? (
                   <div className="flex flex-col gap-1">
-                    <Message message={item} />
+                    <Message
+                      message={item}
+                      onSendMessage={onSendMessage}
+                    />
                     {item.content &&
                       item.content[0].annotations &&
                       item.content[0].annotations.length > 0 && (
